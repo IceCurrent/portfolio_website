@@ -19,11 +19,6 @@ const photoLabel = photoAlt.trim() || 'Portrait';
 <section class="hero">
   <div class="container">
     <div class="hero__layout">
-      <div class="hero__lead">
-        {eyebrow ? <p class="eyebrow hero__eyebrow">{eyebrow}</p> : null}
-        <h1 class="hero__headline">{headline}</h1>
-      </div>
-
       <div class="hero__photo">
         {
           photoSrc ? (
@@ -45,6 +40,11 @@ const photoLabel = photoAlt.trim() || 'Portrait';
             </div>
           )
         }
+      </div>
+
+      <div class="hero__lead">
+        {eyebrow ? <p class="eyebrow hero__eyebrow">{eyebrow}</p> : null}
+        <h1 class="hero__headline">{headline}</h1>
       </div>
 
       <div class="hero__tail">
@@ -87,12 +87,13 @@ const photoLabel = photoAlt.trim() || 'Portrait';
     }
   }
 
+  /* Photo first on narrow screens so the portrait isn’t stranded below long intro copy. */
   .hero__layout {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-areas:
-      'lead'
       'photo'
+      'lead'
       'tail';
     gap: var(--s-6);
     justify-items: center;

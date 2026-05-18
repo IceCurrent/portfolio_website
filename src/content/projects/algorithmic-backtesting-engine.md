@@ -41,14 +41,6 @@ All are pure pandas operations. Every indicator at time $t$ depends only on data
 
 For binary signal prediction (hold or flat), the project included two classifiers trained on the indicator features. Logistic regression as the linear baseline, and XGBoost for non-linear interactions and feature-importance diagnostics. Both were trained walk-forward. At each rebalance point, the model is retrained on data strictly before the decision. Walk-forward is the only honest way to evaluate a model that will be used to make real-time decisions, since anything else lets information from the future leak into training and inflates measured performance.
 
-## Two practical observations
-
-A couple of things stood out during the build.
-
-The most common bugs in backtesting pipelines are not in the math. They sit at the boundaries between modules. A signal that is correct in isolation gets misaligned with prices because someone shifted the index by one too many. Strict contracts at module edges, with explicit time-stamping and schema checks on the stream objects, catch these bugs at construction time rather than at the P&L summary. This is what the architecture is really for. The four-module split is not aesthetic, it is defensive.
-
-XGBoost's feature-importance output turned out to be more useful than I expected as a sanity check. If a momentum strategy is loading heavily on a volume indicator, that is worth investigating. Either there is a real volume effect being captured, or there is a leak in the feature engineering. Either way, the importance output forces the question.
-
 ## What I'd extend
 
 Two directions stand out.

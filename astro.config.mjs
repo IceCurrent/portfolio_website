@@ -7,7 +7,7 @@ import rehypeExternalLinks from 'rehype-external-links';
 
 // Update `site` before deploy so canonical URLs, OG, and sitemap resolve correctly.
 export default defineConfig({
-  site: 'https://example.com',
+  site: 'https://shreyanshsharma.me',
   integrations: [sitemap()],
   trailingSlash: 'ignore',
   build: {

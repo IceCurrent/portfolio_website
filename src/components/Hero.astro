@@ -19,31 +19,9 @@ const photoLabel = photoAlt.trim() || 'Portrait';
 <section class="hero">
   <div class="container">
     <div class="hero__layout">
-      <div class="hero__content">
+      <div class="hero__lead">
         {eyebrow ? <p class="eyebrow hero__eyebrow">{eyebrow}</p> : null}
         <h1 class="hero__headline">{headline}</h1>
-        {
-          paragraphs.map((text, i) => (
-            <p class:list={['hero__sub', { 'hero__sub--follow': i > 0 }]}>{text}</p>
-          ))
-        }
-        {
-          links.length > 0 && (
-            <p class="hero__links">
-              {links.map((link, i) => (
-                <>
-                  <a href={link.href} class="arrow-link">
-                    <span>{link.label}</span>
-                    <span class="arrow-link__glyph" aria-hidden="true">
-                      &rarr;
-                    </span>
-                  </a>
-                  {i < links.length - 1 && <span class="hero__links-sep" aria-hidden="true" />}
-                </>
-              ))}
-            </p>
-          )
-        }
       </div>
 
       <div class="hero__photo">
@@ -68,6 +46,31 @@ const photoLabel = photoAlt.trim() || 'Portrait';
           )
         }
       </div>
+
+      <div class="hero__tail">
+        {
+          paragraphs.map((text, i) => (
+            <p class:list={['hero__sub', { 'hero__sub--follow': i > 0 }]}>{text}</p>
+          ))
+        }
+        {
+          links.length > 0 && (
+            <p class="hero__links">
+              {links.map((link, i) => (
+                <>
+                  <a href={link.href} class="arrow-link">
+                    <span>{link.label}</span>
+                    <span class="arrow-link__glyph" aria-hidden="true">
+                      &rarr;
+                    </span>
+                  </a>
+                  {i < links.length - 1 && <span class="hero__links-sep" aria-hidden="true" />}
+                </>
+              ))}
+            </p>
+          )
+        }
+      </div>
     </div>
   </div>
 </section>
@@ -85,29 +88,46 @@ const photoLabel = photoAlt.trim() || 'Portrait';
   }
 
   .hero__layout {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'lead'
+      'photo'
+      'tail';
     gap: var(--s-6);
-    align-items: center;
+    justify-items: center;
   }
 
   @media (min-width: 768px) {
     .hero__layout {
-      flex-direction: row;
-      align-items: flex-start;
-      justify-content: space-between;
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        'lead photo'
+        'tail photo';
       gap: var(--s-7);
+      align-items: start;
+      justify-items: stretch;
     }
   }
 
-  .hero__content {
+  .hero__lead {
+    grid-area: lead;
     max-width: var(--measure-prose);
-    flex: 1;
-    min-width: 0;
     width: 100%;
+    min-width: 0;
+    justify-self: start;
+  }
+
+  .hero__tail {
+    grid-area: tail;
+    max-width: var(--measure-prose);
+    width: 100%;
+    min-width: 0;
+    justify-self: start;
   }
 
   .hero__photo {
+    grid-area: photo;
     flex-shrink: 0;
   }
 

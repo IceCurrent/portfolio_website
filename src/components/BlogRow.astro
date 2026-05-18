@@ -1,0 +1,122 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { title, summary, tags, draft } = post.data;
+const href = `/writing/${post.slug}`;
+const tagLine = tags.join(' · ');
+
+const mo = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+const d = post.data.date;
+const dateStr = `${mo[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+---
+
+<a href={href} class:list={['blog-row', { 'blog-row--draft': draft }]}>
+  <time class="blog-row__date" datetime={d.toISOString()}>{dateStr}</time>
+  <div class="blog-row__main">
+    <h2 class="blog-row__title">
+      {draft && <span class="blog-row__draft-flag">Draft · </span>}
+      {title}
+    </h2>
+    <p class:list={['blog-row__summary', { 'blog-row__summary--draft': draft }]}>
+      {summary}
+    </p>
+    <p class="blog-row__tags eyebrow">{tagLine}</p>
+  </div>
+</a>
+
+<style>
+  .blog-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+    padding-block: var(--s-5);
+    border-bottom: var(--bw) solid var(--c-mid-gray);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .blog-row:first-of-type {
+    border-top: var(--bw) solid var(--c-mid-gray);
+  }
+
+  @media (min-width: 768px) {
+    .blog-row {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: var(--s-6);
+    }
+  }
+
+  .blog-row__date {
+    flex: 0 0 auto;
+    width: auto;
+    font-family: var(--ff-sans);
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (min-width: 768px) {
+    .blog-row__date {
+      width: 120px;
+    }
+  }
+
+  .blog-row__main {
+    flex: 1;
+    min-width: 0;
+    max-width: var(--measure-prose);
+  }
+
+  .blog-row__title {
+    font-family: var(--ff-serif);
+    font-size: var(--fs-lg);
+    font-weight: 600;
+    color: var(--c-charcoal);
+    line-height: var(--lh-snug);
+    transition: color 160ms ease;
+  }
+
+  .blog-row:hover .blog-row__title,
+  .blog-row:focus-visible .blog-row__title {
+    color: var(--c-bright-blue);
+  }
+
+  .blog-row__draft-flag {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--c-deep-blue);
+  }
+
+  .blog-row__summary {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-base);
+    color: var(--c-charcoal);
+    line-height: var(--lh-body);
+    margin-top: var(--s-2);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .blog-row__summary--draft {
+    font-weight: 500;
+    color: var(--c-deep-blue);
+  }
+
+  .blog-row__tags {
+    margin-top: var(--s-3);
+    color: var(--c-muted);
+  }
+</style>

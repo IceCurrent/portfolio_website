@@ -1,0 +1,78 @@
+---
+import '@fontsource/source-serif-4/400.css';
+import '@fontsource/source-serif-4/600.css';
+import '@fontsource/source-serif-4/400-italic.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/jetbrains-mono/400.css';
+
+import '../styles/tokens.css';
+import '../styles/reset.css';
+import '../styles/typography.css';
+import 'katex/dist/katex.min.css';
+import '../styles/global.css';
+
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+export interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  /** Pages that should not appear in search results (e.g. drafts) can flip this off. */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = "Shreyansh Kumar Sharma — Master's student in Financial Mathematics at NC State. Notes and projects on derivatives pricing, stochastic calculus, and numerical methods.",
+  ogImage = '/og-default.svg',
+  noindex = false,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://example.com').toString();
+const ogUrl = new URL(ogImage, Astro.site ?? 'https://example.com').toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    {/* Open Graph */}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+
+    {/* Twitter */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogUrl} />
+
+    {/* DESIGN CHOICE: alternate stylesheet for theme color matches the deep
+        blue used in the footer, so address bars on mobile pick that up. */}
+    <meta name="theme-color" content="#FFFFFF" />
+  </head>
+  <body>
+    <a class="sr-only" href="#main">Skip to content</a>
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

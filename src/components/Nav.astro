@@ -1,0 +1,276 @@
+---
+// DESIGN CHOICE: "Contact" routes to the footer's anchor (#contact) rather
+// than a dedicated /contact page, because the brief defaults to skipping
+// that page and using the footer mailto as the entire contact surface.
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/writing', label: 'Writing' },
+  { href: '#contact', label: 'Contact' },
+];
+
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const isActive = (href: string) => {
+  if (href.startsWith('#')) return false;
+  if (href === '/') return currentPath === '/';
+  return currentPath === href || currentPath.startsWith(href + '/');
+};
+---
+
+<header class="nav">
+  <div class="container nav__inner">
+    <a href="/" class="nav__wordmark">
+      <span class="nav__wordmark-full">Shreyansh Kumar Sharma</span>
+      <span class="nav__wordmark-short">Shreyansh Sharma</span>
+    </a>
+
+    <nav class="nav__desktop" aria-label="Primary">
+      <ul class="nav__list">
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class:list={['nav__link', { 'nav__link--active': isActive(link.href) }]}
+              aria-current={isActive(link.href) ? 'page' : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <button
+      type="button"
+      class="nav__toggle"
+      aria-label="Open navigation menu"
+      aria-controls="mobile-menu"
+      aria-expanded="false"
+      data-nav-toggle
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+        <line x1="4" y1="7" x2="20" y2="7" />
+        <line x1="4" y1="12" x2="20" y2="12" />
+        <line x1="4" y1="17" x2="20" y2="17" />
+      </svg>
+    </button>
+  </div>
+
+  <div id="mobile-menu" class="nav__overlay" hidden data-nav-overlay>
+    <div class="nav__overlay-inner container">
+      <div class="nav__overlay-top">
+        <a href="/" class="nav__wordmark">
+          <span class="nav__wordmark-full">Shreyansh Kumar Sharma</span>
+          <span class="nav__wordmark-short">Shreyansh Sharma</span>
+        </a>
+        <button
+          type="button"
+          class="nav__toggle"
+          aria-label="Close navigation menu"
+          data-nav-close
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+            <line x1="6" y1="6" x2="18" y2="18" />
+            <line x1="18" y1="6" x2="6" y2="18" />
+          </svg>
+        </button>
+      </div>
+      <ul class="nav__overlay-list">
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class:list={['nav__overlay-link', { 'nav__overlay-link--active': isActive(link.href) }]}
+              aria-current={isActive(link.href) ? 'page' : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav {
+    background: var(--c-white);
+    border-bottom: var(--bw) solid var(--c-mid-gray);
+  }
+
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+
+  @media (min-width: 1024px) {
+    .nav__inner {
+      height: 72px;
+    }
+  }
+
+  .nav__wordmark {
+    font-family: var(--ff-serif);
+    font-size: var(--fs-md);
+    color: var(--c-deep-blue);
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+
+  .nav__wordmark-short {
+    display: none;
+  }
+
+  @media (max-width: 767px) {
+    .nav__wordmark-full {
+      display: none;
+    }
+    .nav__wordmark-short {
+      display: inline;
+    }
+  }
+
+  .nav__desktop {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .nav__desktop {
+      display: block;
+    }
+  }
+
+  .nav__list {
+    display: flex;
+    gap: var(--s-5);
+    align-items: center;
+  }
+
+  .nav__link {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-sm);
+    color: var(--c-charcoal);
+    position: relative;
+    padding-block: 6px;
+    font-weight: 400;
+    transition: color 160ms ease;
+  }
+
+  .nav__link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 2px;
+    background: var(--c-bright-blue);
+    opacity: 0;
+    transition: opacity 160ms ease;
+  }
+
+  .nav__link:hover::after,
+  .nav__link:focus-visible::after,
+  .nav__link--active::after {
+    opacity: 1;
+  }
+
+  .nav__toggle {
+    color: var(--c-charcoal);
+    padding: 8px;
+    margin-right: -8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (min-width: 768px) {
+    .nav__toggle {
+      display: none;
+    }
+  }
+
+  .nav__overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--c-white);
+    z-index: 50;
+    overflow-y: auto;
+    /* Subtle elevation; the only allowed shadow per spec. */
+    box-shadow: 0 0 0 1px var(--c-mid-gray);
+  }
+
+  .nav__overlay[hidden] {
+    display: none;
+  }
+
+  .nav__overlay-inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-block: 0;
+  }
+
+  .nav__overlay-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    border-bottom: var(--bw) solid var(--c-mid-gray);
+    margin-inline: -20px;
+    padding-inline: 20px;
+  }
+
+  .nav__overlay-list {
+    padding-block: var(--s-5);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav__overlay-link {
+    display: block;
+    font-family: var(--ff-serif);
+    font-size: var(--fs-lg);
+    color: var(--c-charcoal);
+    padding-block: var(--s-3);
+    border-bottom: var(--bw) solid var(--c-mid-gray);
+    text-align: left;
+  }
+
+  .nav__overlay-link--active {
+    color: var(--c-bright-blue);
+  }
+</style>
+
+<script>
+  const toggleButtons = document.querySelectorAll<HTMLButtonElement>('[data-nav-toggle]');
+  const closeButtons = document.querySelectorAll<HTMLButtonElement>('[data-nav-close]');
+  const overlay = document.querySelector<HTMLElement>('[data-nav-overlay]');
+
+  const open = () => {
+    if (!overlay) return;
+    overlay.hidden = false;
+    document.documentElement.style.overflow = 'hidden';
+    toggleButtons.forEach((b) => b.setAttribute('aria-expanded', 'true'));
+  };
+  const close = () => {
+    if (!overlay) return;
+    overlay.hidden = true;
+    document.documentElement.style.overflow = '';
+    toggleButtons.forEach((b) => b.setAttribute('aria-expanded', 'false'));
+  };
+
+  toggleButtons.forEach((btn) => btn.addEventListener('click', open));
+  closeButtons.forEach((btn) => btn.addEventListener('click', close));
+
+  // Close overlay when an in-page anchor is clicked so #contact actually jumps.
+  overlay?.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay && !overlay.hidden) close();
+  });
+</script>

@@ -1,0 +1,473 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ProjectRow from '../components/ProjectRow.astro';
+import BlogRow from '../components/BlogRow.astro';
+import IconDownload from '../components/icons/IconDownload.astro';
+import { getCollection } from 'astro:content';
+import { sortProjectsByPinnedOrder } from '../lib/projectOrder';
+
+const education = [
+  {
+    institution: 'North Carolina State University',
+    role: 'Master of Financial Mathematics',
+    dates: 'Aug 2025 – Dec 2026',
+    coursework:
+      'Options & Derivatives Pricing, Machine Learning in Finance, Fundamentals of Statistical Inference I, Stochastic Calculus for Finance, Monte Carlo for Financial Mathematics, Probability and Stochastic Processes II, Fundamentals of Regression & Linear Models, Quantitative Trading Strategies',
+    gpa: '3.96 / 4.00',
+    documents: [
+      {
+        href: '/documents/NCSU_Transcripts.pdf',
+        downloadAs: 'NCSU_Transcripts.pdf',
+        label: 'Masters transcripts',
+      },
+    ],
+    imageAlt: 'North Carolina State University logo',
+    imageSrc: '/images/nc-state.jpg',
+  },
+  {
+    institution: 'Indian Institute of Technology Kharagpur',
+    role: 'Bachelor of Science in Mathematics and Computing',
+    subrole: '(Micro specialization in Innovation & Entrepreneurship)',
+    dates: 'Aug 2021 – Jul 2025',
+    coursework:
+      'Linear Algebra, Computational Geometry, Numerical Solution of Ordinary and Partial Differential Equations, Probability and Statistics, Real Analysis, Transform Calculus, Applied Computational Methods, Design and Analysis of Algorithms, Optimization Techniques, Number Theory, Big Data Analysis, Database Systems, Measure Theory and Integration, Artificial Intelligence and Machine Learning',
+    gpa: '3.37 / 4.00',
+    documents: [
+      {
+        href: '/documents/IITKGP_transcripts.pdf',
+        downloadAs: 'IITKGP_transcripts.pdf',
+        label: "Bachelor's transcripts",
+      },
+      {
+        href: '/documents/Bachelors_Degree.pdf',
+        downloadAs: 'Bachelors_Degree.pdf',
+        label: "Bachelor's degree",
+      },
+    ],
+    imageAlt: 'Indian Institute of Technology Kharagpur logo',
+    imageSrc: '/images/iitkgp.png',
+  },
+];
+
+const experience = [
+  {
+    institution: 'Franklin Templeton Investments',
+    role: 'Gen AI Product Engineering Intern & Co-op',
+    dates: 'May 2024 – Mar 2025 · Hyderabad (Hybrid)',
+    description:
+      "I worked in the Gen AI team within the Digital Transformation Group, where I helped develop AI products for US retail sales workflows. My first project was an SQL-GPT chatbot that made financial data accessible to sales teams without exposing the underlying data to the LLM. After my summer internship, I stayed on part-time as a co-op and worked on a few more things: a follow-up prediction system that scored 1,000+ sales notes using NLP and transformers, a pipeline that synthesized macro news and internal letters into client-specific talking points, and a profile-analysis system that processed 10,000+ X.com accounts to match clients with the firm's offerings.",
+    skills: ['Databricks', 'Snowflake', 'Python', 'Data manipulation', 'SQL'],
+    imageAlt: 'Franklin Templeton Investments logo',
+    imageSrc: '/images/franklin-templeton.jpg',
+  },
+];
+
+const HOME_FEATURED_PROJECT_SLUGS = ['volterra-heston-model', 'local-volatility-model'] as const;
+
+const allProjects = sortProjectsByPinnedOrder(await getCollection('projects'));
+const featuredProjects = HOME_FEATURED_PROJECT_SLUGS.map((slug) =>
+  allProjects.find((p) => p.slug === slug)
+).filter((p): p is NonNullable<typeof p> => Boolean(p));
+
+const featuredPosts = [...(await getCollection('blog'))]
+  .filter((post) => post.data.draft !== true)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const heroIntro =
+"Currently a master's student in the Financial Mathematics program at North Carolina State University. I graduated last year from the Indian Institute of Technology Kharagpur with a bachelor's in Mathematics and Computing. Through various academic and independent projects, I've explored options pricing, Monte Carlo simulations, and the design and backtesting of trading strategies. I welcome you here to explore my projects and the occasional blog posts that I write."
+const heroCloser =
+"Below are some projects and pieces I've worked on. If anything here is worth a conversation, my email is in the footer."
+---
+
+<BaseLayout
+  title="Shreyansh"
+  description="Shreyansh Kumar Sharma — Master's student in Financial Mathematics at NC State. Notes and projects on derivatives pricing, stochastic calculus, and numerical methods."
+>
+  <Hero
+    headline="Hi there, I'm Shreyansh."
+    paragraphs={[heroIntro, heroCloser]}
+    photoSrc="/images/portrait.jpg"
+    photoAlt="Shreyansh Kumar Sharma"
+    links={[
+      { href: '/projects', label: 'Browse projects' },
+      { href: '/writing', label: 'Read writing' },
+    ]}
+  />
+
+  <section class="section section--bg" aria-labelledby="about-heading">
+    <div class="container">
+      <div class="label-content">
+        <div class="label-content__label">
+          <p class="eyebrow" id="about-heading">About</p>
+        </div>
+        <div class="prose">
+          <p>
+          Math has been my favourite subject for as long as I can remember, and choosing to study it in undergrad felt obvious. I spent four years at IIT Kharagpur doing my Bachelor's in Mathematics and Computing, where I studied pure math, applied math, statistics, and computer science. Somewhere along the way I realised that I wanted to apply all my training in mathematics and computing to finance. So I'm now pursuing my master's in Financial Mathematics at North Carolina State University to make that transition. My coursework is specialized towards quantitative finance, covering derivatives pricing, stochastic calculus, numerical methods, and probability and statistics.
+          </p>
+          <p>
+          Below, you'll find more on my projects, my internship at Franklin Templeton, and the coursework along the way.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="cv-heading">
+    <div class="container">
+      <h2 class="sr-only" id="cv-heading">Education and experience</h2>
+
+      <div class="label-content">
+        <div class="label-content__label">
+          <p class="eyebrow">Education</p>
+        </div>
+        <ol class="cv-list">
+          {education.map((item) => (
+            <li class="cv-item">
+              <div class="cv-item__media">
+                {item.imageSrc ? (
+                  <img
+                    class="cv-item__img"
+                    src={item.imageSrc}
+                    alt={item.imageAlt ?? `${item.institution} logo`}
+                    width="72"
+                    height="72"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div
+                    class="cv-item__placeholder"
+                    role="img"
+                    aria-label={`${item.institution} — add a logo image (set imageSrc in index.astro)`}
+                  />
+                )}
+              </div>
+              <div class="cv-item__body">
+                <h3 class="cv-item__institution">{item.institution}</h3>
+                <p class="cv-item__role">{item.role}</p>
+                {'subrole' in item && item.subrole ? (
+                  <p class="cv-item__subrole">{item.subrole}</p>
+                ) : null}
+                <p class="cv-item__dates">{item.dates}</p>
+                <p class="cv-item__description">
+                  <strong>Relevant coursework:</strong>{' '}
+                  {item.coursework}
+                </p>
+                <p class="cv-item__description cv-item__gpa">GPA: {item.gpa}</p>
+                {item.documents?.length ? (
+                  <div class="cv-item__documents">
+                    {item.documents.map((doc) => (
+                      <a
+                        href={doc.href}
+                        download={doc.downloadAs}
+                        class="cv-item__transcript-link"
+                      >
+                        <span class="cv-item__transcript-icon" aria-hidden="true">
+                          <IconDownload size={16} />
+                        </span>
+                        <span>{doc.label}</span>
+                      </a>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <hr class="cv-rule" />
+
+      <div class="label-content">
+        <div class="label-content__label">
+          <p class="eyebrow">Experience</p>
+        </div>
+        <ol class="cv-list">
+          {experience.map((item) => (
+            <li class="cv-item">
+              <div class="cv-item__media">
+                {item.imageSrc ? (
+                  <img
+                    class="cv-item__img"
+                    src={item.imageSrc}
+                    alt={item.imageAlt ?? `${item.institution} logo`}
+                    width="72"
+                    height="72"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div
+                    class="cv-item__placeholder"
+                    role="img"
+                    aria-label={`${item.institution} — add a logo image (set imageSrc in index.astro)`}
+                  />
+                )}
+              </div>
+              <div class="cv-item__body">
+                <h3 class="cv-item__institution">{item.institution}</h3>
+                <p class="cv-item__role">{item.role}</p>
+                <p class="cv-item__dates">{item.dates}</p>
+                {'skills' in item && item.skills?.length ? (
+                  <p class="cv-item__experience-tags eyebrow">
+                    {item.skills.map((skill) => skill.toUpperCase()).join(' · ')}
+                  </p>
+                ) : null}
+                <p
+                  class:list={[
+                    'cv-item__description',
+                    { 'cv-item__description--after-tags': 'skills' in item && item.skills?.length },
+                  ]}
+                >
+                  {item.description}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="selected-projects-heading">
+    <div class="container">
+      <div class="label-content label-content--tight">
+        <div class="label-content__label">
+          <p class="eyebrow" id="selected-projects-heading">Work</p>
+        </div>
+        <div class="projects-preview">
+          <h2 class="home-preview__h serif-heading">Selected projects</h2>
+          <div class="projects-preview__list">
+            {featuredProjects.map((project) => (
+              <ProjectRow project={project} />
+            ))}
+          </div>
+          <p class="home-preview__more">
+            <a href="/projects" class="arrow-link">
+              <span>All projects</span>
+              <span class="arrow-link__glyph" aria-hidden="true">&rarr;</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--bg" aria-labelledby="selected-writing-heading">
+    <div class="container">
+      <div class="label-content label-content--tight">
+        <div class="label-content__label">
+          <p class="eyebrow" id="selected-writing-heading">Writing</p>
+        </div>
+          <div class="writing-preview">
+          <h2 class="home-preview__h serif-heading">Selected writing</h2>
+          <div class="writing-preview__list">
+            {featuredPosts.map((post) => (
+              <BlogRow post={post} />
+            ))}
+          </div>
+          <p class="home-preview__more">
+            <a href="/writing" class="arrow-link">
+              <span>All writing</span>
+              <span class="arrow-link__glyph" aria-hidden="true">&rarr;</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .serif-heading {
+    font-family: var(--ff-serif);
+    font-size: var(--fs-xl);
+    font-weight: 600;
+    color: var(--c-charcoal);
+    line-height: var(--lh-snug);
+    margin-bottom: var(--s-6);
+  }
+
+  .label-content--tight {
+    align-items: start;
+  }
+
+  .home-preview__more {
+    text-align: right;
+    margin-top: var(--s-6);
+  }
+
+  .writing-preview__list :global(.blog-row:first-of-type) {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .writing-preview__list :global(.blog-row) {
+    padding-block: var(--s-5);
+  }
+
+  .writing-preview__list :global(.blog-row:last-child) {
+    border-bottom: none;
+  }
+
+  .projects-preview__list :global(.project-row:first-of-type) {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .projects-preview__list :global(.project-row) {
+    padding-block: var(--s-5);
+  }
+
+  .projects-preview__list :global(.project-row:last-child) {
+    border-bottom: none;
+  }
+
+  .prose {
+    max-width: var(--measure-prose);
+  }
+
+  .prose p {
+    margin-block: var(--s-4);
+    color: var(--c-charcoal);
+    line-height: var(--lh-body);
+  }
+
+  .prose p:first-child {
+    margin-top: 0;
+  }
+
+  .cv-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-6);
+  }
+
+  .cv-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--s-4);
+    align-items: start;
+  }
+
+  .cv-item__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-1);
+    min-width: 0;
+  }
+
+  .cv-item__media {
+    flex-shrink: 0;
+  }
+
+  .cv-item__img,
+  .cv-item__placeholder {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 10px;
+    box-sizing: border-box;
+  }
+
+  .cv-item__img {
+    object-fit: contain;
+    background: var(--c-white);
+    border: var(--bw) solid var(--c-mid-gray);
+  }
+
+  .cv-item__placeholder {
+    border: var(--bw) dashed var(--c-mid-gray);
+    background: var(--c-light-gray);
+  }
+
+  .cv-item__institution {
+    font-family: var(--ff-serif);
+    font-size: var(--fs-lg);
+    color: var(--c-charcoal);
+    font-weight: 600;
+    line-height: var(--lh-snug);
+  }
+
+  .cv-item__role {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-base);
+    color: var(--c-charcoal);
+    line-height: var(--lh-body);
+  }
+
+  .cv-item__subrole {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-sm);
+    color: var(--c-charcoal);
+    line-height: var(--lh-body);
+    margin-top: var(--s-2);
+    max-width: var(--measure-prose);
+  }
+
+  .cv-item__dates {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+    margin-top: var(--s-2);
+  }
+
+  .cv-item__description {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-base);
+    color: var(--c-charcoal);
+    margin-top: var(--s-2);
+    max-width: var(--measure-prose);
+    line-height: var(--lh-body);
+  }
+
+  .cv-item__gpa {
+    margin-top: var(--s-3);
+  }
+
+  .cv-item__experience-tags {
+    margin-top: var(--s-2);
+    color: var(--c-muted);
+    max-width: var(--measure-prose);
+  }
+
+  .cv-item__description--after-tags {
+    margin-top: var(--s-3);
+  }
+
+  .cv-item__documents {
+    margin-top: var(--s-4);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-4);
+    align-items: center;
+  }
+
+  .cv-item__transcript-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    font-family: var(--ff-sans);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    color: var(--c-bright-blue);
+    text-decoration: none;
+    text-underline-offset: 3px;
+  }
+
+  .cv-item__transcript-link:hover,
+  .cv-item__transcript-link:focus-visible {
+    text-decoration: underline;
+  }
+
+  .cv-item__transcript-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: var(--c-bright-blue);
+  }
+
+  .cv-rule {
+    margin-block: var(--s-7);
+    border: 0;
+    border-top: var(--bw) solid var(--c-mid-gray);
+  }
+</style>

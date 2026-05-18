@@ -1,0 +1,17 @@
+---
+// Hairline divider used between same-background sections.
+// Don't mix this with alternating --c-white / --c-light-gray backgrounds
+// on the same page; pick one separation strategy per page.
+---
+
+<div class="container">
+  <hr class="section-divider" />
+</div>
+
+<style>
+  .section-divider {
+    border: 0;
+    border-top: var(--bw) solid var(--c-mid-gray);
+    margin: 0;
+  }
+</style>

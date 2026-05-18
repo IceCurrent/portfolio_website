@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { sortProjectsByPinnedOrder } from '../../lib/projectOrder';
+
+const raw = await getCollection('projects');
+const projects = sortProjectsByPinnedOrder(raw);
+---
+
+<BaseLayout
+  title="Projects — Shreyansh Kumar Sharma"
+  description="Things I've built, mostly during graduate coursework and self-directed research. Each links to the code on GitHub."
+>
+  <section class="section">
+    <div class="container">
+      <header class="page-head">
+        <p class="eyebrow">Work</p>
+        <h1 class="page-head__title">Projects</h1>
+        <p class="page-head__lede">
+          Things I've built, mostly during graduate coursework and self-directed research. Each links to the code on GitHub.
+        </p>
+      </header>
+
+      <div class="project-grid">
+        {
+          projects.map((project) => (
+            <ProjectCard
+              slug={project.slug}
+              title={project.data.title}
+              summary={project.data.summary}
+              tags={project.data.tags}
+              dateRange={project.data.dateRange}
+              heroAlt={project.data.heroImageAlt}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head {
+    max-width: var(--measure-prose);
+    margin-bottom: var(--s-7);
+  }
+
+  .page-head__title {
+    margin-top: var(--s-3);
+    font-family: var(--ff-serif);
+    font-size: var(--fs-2xl);
+    font-weight: 600;
+    line-height: var(--lh-tight);
+    color: var(--c-charcoal);
+  }
+
+  .page-head__lede {
+    margin-top: var(--s-4);
+    font-family: var(--ff-sans);
+    font-size: var(--fs-md);
+    color: var(--c-muted);
+    line-height: var(--lh-body);
+  }
+
+  .project-grid {
+    display: grid;
+    gap: var(--s-6);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 768px) {
+    .project-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

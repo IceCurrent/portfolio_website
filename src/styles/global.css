@@ -1,0 +1,155 @@
+/* ------------------------------------------------------------------
+ * Global: layout primitives, section rhythm, link defaults.
+ * Imports happen in BaseLayout in this order:
+ *   tokens.css → reset.css → typography.css → global.css
+ * ------------------------------------------------------------------ */
+
+/* ---- Container: page-width wrapper with consistent gutter ---- */
+.container {
+  width: 100%;
+  max-width: var(--measure-page);
+  margin-inline: auto;
+  padding-inline: 20px; /* mobile gutter */
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-inline: var(--s-5); /* 32px desktop gutter */
+  }
+}
+
+/* ---- Narrow container for hero/intro text blocks ---- */
+.container--narrow {
+  max-width: calc(var(--measure-narrow) + 2 * 20px);
+  margin-inline: 0;
+}
+
+@media (min-width: 768px) {
+  .container--narrow {
+    max-width: calc(var(--measure-narrow) + 2 * var(--s-5));
+  }
+}
+
+/* ---- Section rhythm: padding-block on every major section ---- */
+.section {
+  padding-block: var(--s-7); /* mobile: 64px */
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-block: var(--s-8); /* desktop: 96px */
+  }
+}
+
+.section--bg {
+  background: var(--c-light-gray);
+}
+
+.section--dark {
+  background: var(--c-deep-blue);
+  color: var(--c-white);
+}
+
+/* ---- Hairline divider between sections (when alternating bg not used) ---- */
+.hairline {
+  border: 0;
+  border-top: var(--bw) solid var(--c-mid-gray);
+}
+
+/* ---- Link defaults inside prose / generic surfaces ---- */
+a.text-link {
+  color: var(--c-bright-blue);
+  text-decoration: none;
+  text-underline-offset: 6px;
+  transition: text-decoration-color 160ms ease;
+}
+
+a.text-link:hover,
+a.text-link:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+
+/* ---- Inline arrow link pattern (e.g. "See my work →") ---- */
+.arrow-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45em;
+  color: var(--c-charcoal);
+  font-size: var(--fs-base);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--c-mid-gray);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+}
+
+.arrow-link .arrow-link__glyph {
+  display: inline-block;
+  transition: transform 200ms ease;
+  text-decoration: none;
+}
+
+.arrow-link:hover,
+.arrow-link:focus-visible {
+  color: var(--c-bright-blue);
+  text-decoration-color: var(--c-bright-blue);
+}
+
+.arrow-link:hover .arrow-link__glyph,
+.arrow-link:focus-visible .arrow-link__glyph {
+  transform: translateX(6px);
+}
+
+/* Article footer nav placed via Astro slot */
+.article-page__nav-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-5);
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* ---- Screen reader only ---- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- Two-column label/content pattern (About, Education) ---- */
+.label-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-4);
+}
+
+@media (min-width: 1024px) {
+  .label-content {
+    grid-template-columns: 5fr 7fr;
+    gap: var(--s-6);
+  }
+}
+
+.label-content__label {
+  /* Sits at the top of the column; aligns with section eyebrows in feel. */
+  padding-top: var(--s-1);
+}
+
+/* Reduced motion: kill transitions, keep functionality. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import BlogRow from '../../components/BlogRow.astro';
+
+const posts = [...(await getCollection('blog'))]
+  .filter((post) => post.data.draft !== true)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout
+  title="Writing — Shreyansh Kumar Sharma"
+  description="Notes on what I'm working through — derivatives pricing, stochastic calculus, the numerical methods underneath, and occasional detours."
+>
+  <section class="section">
+    <div class="container">
+      <header class="page-head">
+        <p class="eyebrow">Writing</p>
+        <h1 class="page-head__title">Writing</h1>
+        <p class="page-head__lede">
+          Notes on what I'm working through — derivatives pricing, stochastic calculus, the numerical methods underneath, and occasional detours. New posts will appear here as I write them.
+        </p>
+      </header>
+
+      <div class="writing-list">
+        {posts.map((post) => <BlogRow post={post} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head {
+    max-width: var(--measure-prose);
+    margin-bottom: var(--s-6);
+  }
+
+  .page-head__title {
+    margin-top: var(--s-3);
+    font-family: var(--ff-serif);
+    font-size: var(--fs-2xl);
+    font-weight: 600;
+    line-height: var(--lh-tight);
+    color: var(--c-charcoal);
+  }
+
+  .page-head__lede {
+    margin-top: var(--s-4);
+    font-family: var(--ff-sans);
+    font-size: var(--fs-md);
+    color: var(--c-muted);
+    line-height: var(--lh-body);
+  }
+
+  .writing-list {
+    max-width: calc(var(--measure-prose) + 120px + var(--s-6));
+  }
+</style>

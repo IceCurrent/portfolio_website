@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { sortProjectsByPinnedOrder } from '../../lib/projectOrder';
+import { projectHeroSrc } from '../../lib/projectHero';
+
+export async function getStaticPaths() {
+  const all = await getCollection('projects');
+  const ordered = sortProjectsByPinnedOrder(all);
+  return ordered.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+
+const ordered = sortProjectsByPinnedOrder(await getCollection('projects'));
+const idx = ordered.findIndex((p) => p.slug === project.slug);
+const nextProject = idx < ordered.length - 1 ? ordered[idx + 1] : null;
+
+const title = `${project.data.title} — Shreyansh Kumar Sharma`;
+const headline = project.data.title;
+const description = project.data.summary;
+const hero = {
+  src: projectHeroSrc(project.slug),
+  alt: project.data.heroImageAlt,
+};
+---
+
+<ArticleLayout
+  title={title}
+  headline={headline}
+  description={description}
+  ogImage={hero.src}
+  collectionLabel="PROJECT"
+  eyebrow="PROJECT"
+  summary={project.data.summary}
+  meta={{
+    dateRange: project.data.dateRange,
+    tags: project.data.tags,
+    github: project.data.github,
+  }}
+  hero={hero}
+>
+  <Content />
+  <div slot="article-nav" class="article-page__nav-inner">
+    <a href="/projects">← All projects</a>
+    {
+      nextProject ? (
+        <a href={`/projects/${nextProject.slug}`}>Next: {nextProject.data.title} →</a>
+      ) : (
+        <span aria-hidden="true" />
+      )
+    }
+  </div>
+</ArticleLayout>

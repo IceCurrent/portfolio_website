@@ -1,0 +1,188 @@
+---
+export interface Props {
+  /** Omit or leave unset to hide the eyebrow row (avoids duplicating the nav wordmark). */
+  eyebrow?: string;
+  headline: string;
+  /** One or two short blocks read more naturally than a single wall of text. */
+  paragraphs: string[];
+  links?: Array<{ href: string; label: string }>;
+  /** Set to a path under `public/` (e.g. `/images/portrait.jpg`) to show your photo; otherwise a placeholder frame is shown. */
+  photoSrc?: string;
+  /** Alt text for the portrait image; also used as the accessible name for the placeholder. */
+  photoAlt?: string;
+}
+
+const { eyebrow, headline, paragraphs, links = [], photoSrc, photoAlt = 'Portrait' } = Astro.props;
+const photoLabel = photoAlt.trim() || 'Portrait';
+---
+
+<section class="hero">
+  <div class="container">
+    <div class="hero__layout">
+      <div class="hero__content">
+        {eyebrow ? <p class="eyebrow hero__eyebrow">{eyebrow}</p> : null}
+        <h1 class="hero__headline">{headline}</h1>
+        {
+          paragraphs.map((text, i) => (
+            <p class:list={['hero__sub', { 'hero__sub--follow': i > 0 }]}>{text}</p>
+          ))
+        }
+        {
+          links.length > 0 && (
+            <p class="hero__links">
+              {links.map((link, i) => (
+                <>
+                  <a href={link.href} class="arrow-link">
+                    <span>{link.label}</span>
+                    <span class="arrow-link__glyph" aria-hidden="true">
+                      &rarr;
+                    </span>
+                  </a>
+                  {i < links.length - 1 && <span class="hero__links-sep" aria-hidden="true" />}
+                </>
+              ))}
+            </p>
+          )
+        }
+      </div>
+
+      <div class="hero__photo">
+        {
+          photoSrc ? (
+            <img
+              class="hero__photo-img"
+              src={photoSrc}
+              alt={photoLabel}
+              width="200"
+              height="250"
+              loading="eager"
+            />
+          ) : (
+            <div
+              class="hero__photo-placeholder"
+              role="img"
+              aria-label={`${photoLabel} — add an image by passing photoSrc`}
+            >
+              <span class="hero__photo-placeholder__glyph" aria-hidden="true" />
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    background: var(--c-white);
+    padding-block: var(--s-7);
+  }
+
+  @media (min-width: 1024px) {
+    .hero {
+      padding-block: var(--s-9);
+    }
+  }
+
+  .hero__layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-6);
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .hero__layout {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--s-7);
+    }
+  }
+
+  .hero__content {
+    max-width: var(--measure-prose);
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .hero__photo {
+    flex-shrink: 0;
+  }
+
+  .hero__photo-img,
+  .hero__photo-placeholder {
+    display: block;
+    width: min(11rem, 42vw);
+    aspect-ratio: 4 / 5;
+    border-radius: 12px;
+    object-fit: cover;
+  }
+
+  @media (min-width: 768px) {
+    .hero__photo-img,
+    .hero__photo-placeholder {
+      width: 12.5rem;
+    }
+  }
+
+  .hero__photo-placeholder {
+    box-sizing: border-box;
+    border: var(--bw) dashed var(--c-mid-gray);
+    background: var(--c-light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero__photo-placeholder__glyph {
+    width: 40%;
+    max-width: 3.25rem;
+    aspect-ratio: 1;
+    border-radius: 999px;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--c-mid-gray) 55%, transparent) 0%,
+      color-mix(in srgb, var(--c-mid-gray) 22%, transparent) 100%
+    );
+    opacity: 0.9;
+  }
+
+  .hero__eyebrow {
+    margin-bottom: var(--s-4);
+  }
+
+  /* Friendlier hierarchy than global display H1 — reads like a personal welcome, not a billboard. */
+  .hero__headline {
+    font-family: var(--ff-serif);
+    color: var(--c-charcoal);
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    line-height: var(--lh-snug);
+    text-wrap: balance;
+    font-size: clamp(1.625rem, 2.75vw, 2.125rem);
+    max-width: 36ch;
+  }
+
+  .hero__sub {
+    margin-top: var(--s-5);
+    font-family: var(--ff-sans);
+    font-size: var(--fs-base);
+    color: var(--c-charcoal);
+    line-height: var(--lh-body);
+    max-width: var(--measure-prose);
+  }
+
+  .hero__sub--follow {
+    margin-top: var(--s-4);
+    color: var(--c-muted);
+  }
+
+  .hero__links {
+    margin-top: var(--s-6);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-5);
+  }
+</style>

@@ -1,0 +1,66 @@
+/* ------------------------------------------------------------------
+ * Design tokens.
+ * Single source of truth for color, type, spacing, layout, borders.
+ * Edit values here; never hardcode in components.
+ * ------------------------------------------------------------------ */
+
+:root {
+  /* ---- Color: discipline. White is the default surface. ---- */
+  --c-deep-blue: #051C2C;
+  --c-bright-blue: #30A3DA;
+  --c-white: #FFFFFF;
+  --c-light-gray: #F5F5F5;
+  --c-mid-gray: #E5E5E5;
+  --c-charcoal: #212121;
+  /* Bumped from spec #6B6B6B to #5A5A5A so muted body copy clears WCAG AA. */
+  --c-muted: #5A5A5A;
+
+  /* ---- Type scale: modular 1.250 (major third) ---- */
+  --fs-xs: 0.75rem;     /* 12px */
+  --fs-sm: 0.875rem;    /* 14px */
+  --fs-base: 1.0625rem; /* 17px */
+  --fs-md: 1.25rem;     /* 20px */
+  --fs-lg: 1.75rem;     /* 28px */
+  --fs-xl: 2.5rem;      /* 40px */
+  --fs-2xl: 3.5rem;     /* 56px */
+
+  /* ---- Line height ---- */
+  --lh-tight: 1.15;
+  --lh-snug: 1.3;
+  --lh-body: 1.65;
+
+  /* ---- Spacing: 8px multiples (with a half-step) ---- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 16px;
+  --s-4: 24px;
+  --s-5: 32px;
+  --s-6: 48px;
+  --s-7: 64px;
+  --s-8: 96px;
+  --s-9: 144px;
+
+  /* ---- Layout widths ---- */
+  --measure-prose: 680px;
+  --measure-page: 1180px;
+  --measure-narrow: 560px;
+
+  /* ---- Borders ---- */
+  --bw: 1px;
+  --radius: 0;          /* Sharp corners. Inputs may override to 2px. */
+
+  /* ---- Type families ---- */
+  --ff-serif: 'Source Serif 4', 'Source Serif Pro', Georgia, 'Times New Roman', serif;
+  --ff-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  --ff-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* ---- Tracking ---- */
+  --tracking-eyebrow: 0.08em;
+}
+
+/* Tablet adjustments are token-driven below. */
+@media (min-width: 768px) {
+  :root {
+    /* Reserved for any tablet-only token overrides if needed. */
+  }
+}

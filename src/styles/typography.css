@@ -1,0 +1,99 @@
+/* ------------------------------------------------------------------
+ * Typography: family, size, and rhythm rules.
+ * Serif for editorial chrome (headlines, titles, wordmark, pull quotes).
+ * Sans for UI surfaces (nav, body fallback, meta, footer details).
+ * ------------------------------------------------------------------ */
+
+html {
+  font-family: var(--ff-sans);
+  font-size: 100%;
+  color: var(--c-charcoal);
+  line-height: var(--lh-body);
+}
+
+body {
+  font-size: var(--fs-base);
+  background: var(--c-white);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--ff-serif);
+  font-weight: 600;
+  color: var(--c-charcoal);
+  line-height: var(--lh-snug);
+  letter-spacing: -0.005em;
+}
+
+h1 {
+  font-size: var(--fs-2xl);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: var(--fs-xl);
+}
+
+h3 {
+  font-size: var(--fs-lg);
+}
+
+p {
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+}
+
+strong, b {
+  font-weight: 600;
+}
+
+em, i {
+  font-style: italic;
+}
+
+small {
+  font-size: var(--fs-sm);
+}
+
+/* Eyebrow label utility — sparingly applied. Section eyebrows, card eyebrows. */
+.eyebrow {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--c-muted);
+  line-height: 1.2;
+}
+
+.eyebrow--accent {
+  color: var(--c-bright-blue);
+}
+
+.eyebrow--on-dark {
+  color: var(--c-bright-blue);
+}
+
+/* Monospace utility for inline code in chrome (rare). */
+.mono {
+  font-family: var(--ff-mono);
+  font-size: var(--fs-sm);
+}
+
+/* Mobile type scale relaxes the heroic sizes so layouts breathe. */
+@media (max-width: 767px) {
+  h1 {
+    font-size: 2.25rem; /* ~36px */
+  }
+  h2 {
+    font-size: 1.875rem; /* ~30px */
+  }
+  h3 {
+    font-size: 1.375rem; /* ~22px */
+  }
+}
+
+/* KaTeX: avoid site-wide sans-serif leaking into math typesetting */
+.article-body .katex {
+  font-family: KaTeX_Main, KaTeX_Math, Times New Roman, serif !important;
+}

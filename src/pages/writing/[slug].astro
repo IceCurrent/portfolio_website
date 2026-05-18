@@ -1,0 +1,61 @@
+---
+import { getCollection } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { estimateReadingMinutes } from '../../lib/readingTime';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+function sortBlogDesc<T extends { data: { date: Date } }>(entries: T[]): T[] {
+  return [...entries].sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const sorted = sortBlogDesc(await getCollection('blog'));
+const idx = sorted.findIndex((p) => p.slug === post.slug);
+const nextPost = idx < sorted.length - 1 ? sorted[idx + 1] : null;
+
+const title = `${post.data.title} — Shreyansh Kumar Sharma`;
+const headline = post.data.title;
+const readingMinutes = estimateReadingMinutes(post.body);
+const metaDate = post.data.date.toLocaleDateString('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+});
+---
+
+<ArticleLayout
+  title={title}
+  headline={headline}
+  description={post.data.summary}
+  noindex={post.data.draft === true}
+  collectionLabel="WRITING"
+  eyebrow="WRITING"
+  summary={post.data.summary}
+  meta={{
+    dateRange: metaDate,
+    tags: post.data.tags,
+    author: 'Shreyansh Kumar Sharma',
+    readingTimeMinutes: readingMinutes,
+  }}
+>
+  <Content />
+  <div slot="article-nav" class="article-page__nav-inner">
+    <a href="/writing">← All writing</a>
+    {
+      nextPost ? (
+        <a href={`/writing/${nextPost.slug}`}>Next: {nextPost.data.title} →</a>
+      ) : (
+        <span aria-hidden="true" />
+      )
+    }
+  </div>
+</ArticleLayout>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#051C2C"/>
+  <text x="80" y="200" font-family="'Inter', Arial, sans-serif" font-size="20"
+        fill="#30A3DA" letter-spacing="2" font-weight="500">[YOUR NAME / TITLE]</text>
+  <text x="80" y="340" font-family="'Source Serif 4', 'Source Serif Pro', Georgia, serif"
+        font-size="84" fill="#FFFFFF" font-weight="600" letter-spacing="-1">[YOUR NAME]</text>
+  <text x="80" y="420" font-family="'Inter', Arial, sans-serif" font-size="28"
+        fill="#FFFFFF" fill-opacity="0.8" font-weight="400">Quantitative finance and applied research</text>
+  <text x="80" y="560" font-family="'Inter', Arial, sans-serif" font-size="16"
+        fill="#FFFFFF" fill-opacity="0.6" letter-spacing="1">example.com</text>
+</svg>
+<!-- TODO: replace with a 1200x630 PNG for production OG previews. -->

@@ -1,0 +1,99 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, summary, tags, dateRange } = project.data;
+const href = `/projects/${project.slug}`;
+const tagLine = tags.join(' · ');
+---
+
+<a href={href} class="project-row">
+  <span class="project-row__dates">{dateRange}</span>
+  <div class="project-row__main">
+    <h2 class="project-row__title">{title}</h2>
+    <p class="project-row__summary">{summary}</p>
+    <p class="project-row__tags eyebrow">{tagLine}</p>
+  </div>
+</a>
+
+<style>
+  .project-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+    padding-block: var(--s-5);
+    border-bottom: var(--bw) solid var(--c-mid-gray);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .project-row:first-of-type {
+    border-top: var(--bw) solid var(--c-mid-gray);
+  }
+
+  @media (min-width: 768px) {
+    .project-row {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: var(--s-6);
+    }
+  }
+
+  .project-row__dates {
+    flex: 0 0 auto;
+    width: auto;
+    font-family: var(--ff-sans);
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (min-width: 768px) {
+    .project-row__dates {
+      width: 120px;
+    }
+  }
+
+  .project-row__main {
+    flex: 1;
+    min-width: 0;
+    max-width: var(--measure-prose);
+  }
+
+  .project-row__title {
+    font-family: var(--ff-serif);
+    font-size: var(--fs-lg);
+    font-weight: 600;
+    color: var(--c-charcoal);
+    line-height: var(--lh-snug);
+    transition: color 160ms ease;
+  }
+
+  .project-row:hover .project-row__title,
+  .project-row:focus-visible .project-row__title {
+    color: var(--c-bright-blue);
+  }
+
+  .project-row__summary {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-base);
+    color: var(--c-charcoal);
+    line-height: var(--lh-body);
+    margin-top: var(--s-2);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .project-row__tags {
+    margin-top: var(--s-3);
+    color: var(--c-muted);
+  }
+</style>

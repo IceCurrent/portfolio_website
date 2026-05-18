@@ -1,0 +1,249 @@
+---
+import IconGitHub from './icons/IconGitHub.astro';
+import IconLinkedIn from './icons/IconLinkedIn.astro';
+
+const EMAIL = 'shreyansh.yashi@gmail.com';
+const PHONE_DISPLAY = '+1 (919) 292-9498';
+const PHONE_TEL = '+19192929498';
+const LOCATION = 'Raleigh, North Carolina';
+
+const SOCIALS = {
+  github: 'https://github.com/IceCurrent',
+  linkedin: 'https://www.linkedin.com/in/shreyansh-kumar-sharma-63a6aa223/',
+};
+---
+
+<footer id="contact" class="footer" aria-labelledby="footer-heading">
+  <div class="container footer__inner">
+    <div class="footer__top">
+      <div class="footer__invitation">
+        <p class="eyebrow eyebrow--on-dark">Get in touch</p>
+        <h2 id="footer-heading" class="footer__headline">Open to conversation.</h2>
+        <p class="footer__context">
+          I'm interested in full-time quantitative roles starting January 2027 — research, trading, and derivatives modeling especially. Also happy to talk about anything in the projects below.
+        </p>
+
+        <a href={`mailto:${EMAIL}`} class="footer__email" aria-label={`Email ${EMAIL}`}>
+          <span class="footer__email-address">{EMAIL}</span>
+          <span class="footer__email-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+
+      <div class="footer__details">
+        <p class="eyebrow eyebrow--on-dark">Elsewhere</p>
+
+        <dl class="footer__list">
+          <div class="footer__row">
+            <dt class="footer__label">Phone</dt>
+            <dd class="footer__value">
+              <a href={`tel:${PHONE_TEL}`} class="footer__detail-link">{PHONE_DISPLAY}</a>
+            </dd>
+          </div>
+          <div class="footer__row">
+            <dt class="footer__label">Location</dt>
+            <dd class="footer__value">{LOCATION}</dd>
+          </div>
+        </dl>
+
+        <ul class="footer__socials" aria-label="Social profiles">
+          <li>
+            <a
+              href={SOCIALS.github}
+              class="footer__social"
+              aria-label="GitHub"
+              target="_blank"
+              rel="noopener noreferrer me"
+            >
+              <IconGitHub size={20} />
+            </a>
+          </li>
+          <li>
+            <a
+              href={SOCIALS.linkedin}
+              class="footer__social"
+              aria-label="LinkedIn"
+              target="_blank"
+              rel="noopener noreferrer me"
+            >
+              <IconLinkedIn size={20} />
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="footer__divider" />
+
+    <div class="footer__bottom">
+      <p class="footer__legal">© 2026 Shreyansh Kumar Sharma</p>
+      <p class="footer__built">Built with Astro</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--c-deep-blue);
+    color: var(--c-white);
+    padding-block: var(--s-7);
+  }
+
+  @media (min-width: 1024px) {
+    .footer {
+      padding-block: var(--s-8);
+    }
+  }
+
+  .footer__top {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s-7);
+  }
+
+  @media (min-width: 1024px) {
+    .footer__top {
+      grid-template-columns: 7fr 5fr;
+      gap: var(--s-8);
+    }
+  }
+
+  .footer__headline {
+    font-family: var(--ff-serif);
+    font-size: var(--fs-xl);
+    color: var(--c-white);
+    line-height: var(--lh-snug);
+    margin-top: var(--s-3);
+    max-width: 22ch;
+  }
+
+  .footer__context {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-md);
+    line-height: var(--lh-body);
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 480px;
+    margin-top: var(--s-3);
+  }
+
+  .footer__email {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-top: var(--s-6);
+    font-family: var(--ff-serif);
+    font-size: var(--fs-lg);
+    color: var(--c-bright-blue);
+    text-underline-offset: 6px;
+    text-decoration: none;
+    line-height: var(--lh-snug);
+    word-break: break-word;
+  }
+
+  @media (min-width: 1024px) {
+    .footer__email {
+      font-size: var(--fs-xl);
+    }
+  }
+
+  .footer__email-arrow {
+    display: inline-block;
+    transition: transform 200ms ease;
+  }
+
+  .footer__email:hover,
+  .footer__email:focus-visible {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+  }
+
+  .footer__email:hover .footer__email-arrow,
+  .footer__email:focus-visible .footer__email-arrow {
+    transform: translateX(6px);
+  }
+
+  .footer__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+    margin-top: var(--s-3);
+  }
+
+  .footer__row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-1);
+  }
+
+  .footer__label {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+  }
+
+  .footer__value {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-base);
+    color: var(--c-white);
+    margin: 0;
+  }
+
+  .footer__detail-link {
+    color: inherit;
+    text-underline-offset: 4px;
+  }
+
+  .footer__detail-link:hover,
+  .footer__detail-link:focus-visible {
+    text-decoration: underline;
+    color: var(--c-bright-blue);
+  }
+
+  .footer__socials {
+    display: flex;
+    gap: var(--s-3);
+    margin-top: var(--s-5);
+    align-items: center;
+  }
+
+  .footer__social {
+    color: var(--c-white);
+    display: inline-flex;
+    transition: color 160ms ease;
+  }
+
+  .footer__social:hover,
+  .footer__social:focus-visible {
+    color: var(--c-bright-blue);
+  }
+
+  .footer__divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    margin-top: var(--s-7);
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+    padding-top: var(--s-4);
+    font-family: var(--ff-sans);
+    font-size: var(--fs-sm);
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  @media (min-width: 768px) {
+    .footer__bottom {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .footer__legal,
+  .footer__built {
+    margin: 0;
+  }
+</style>
